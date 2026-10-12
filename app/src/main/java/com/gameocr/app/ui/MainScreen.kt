@@ -47,6 +47,10 @@ import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material.icons.filled.SwapHoriz
+import androidx.compose.material3.IconButton
+import com.gameocr.app.data.Languages
+import com.gameocr.app.data.TranslatorEngine
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -576,6 +580,131 @@ fun MainScreen(
                 .padding(horizontal = MainScreenHorizontalPadding, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
+            // ===== 语言对 + 引擎（瞬译首页核心控件，极简组织）=====
+            val sourceLang = appSettings?.sourceLang ?: "auto"
+            val targetLang = appSettings?.targetLang ?: "zh-CN"
+            val engine = appSettings?.translatorEngine ?: TranslatorEngine.OPENAI
+            var showSourcePicker by rememberSaveable { mutableStateOf(false) }
+            var showTargetPicker by rememberSaveable { mutableStateOf(false) }
+            var showEnginePicker by rememberSaveable { mutableStateOf(false) }
+            // 专家修正 B2：sourceLang=auto 时禁用交换，避免把 auto 写进目标语
+            val canSwap = sourceLang != "auto" && sourceLang != targetLang
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                TextButton(
+                    onClick = { showSourcePicker = true },
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text(
+                        Languages.nameOf(context, sourceLang),
+                        fontWeight = FontWeight.Medium,
+                        maxLines = 1,
+                    )
+                }
+                IconButton(
+                    onClick = {
+                        scope.launch {
+                            viewModel.updateSettings { it.copy(sourceLang = targetLang, targetLang = sourceLang) }
+                        }
+                    },
+                    enabled = canSwap,
+                ) {
+                    Icon(Icons.Filled.SwapHoriz, contentDescription = stringResource(R.string.main_swap_languages))
+                }
+                TextButton(
+                    onClick = { showTargetPicker = true },
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text(
+                        Languages.nameOf(context, targetLang),
+                        fontWeight = FontWeight.Medium,
+                        maxLines = 1,
+                    )
+                }
+            }
+
+            // 引擎选择行（用 TextButton 包裹，避免 Surface onClick 实验性 API）
+            TextButton(
+                onClick = { showEnginePicker = true },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        stringResource(R.string.main_engine),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Text(
+                        stringResource(translatorEngineLabelRes(engine)),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
+            }
+
+            if (showSourcePicker) {
+                LanguagePickerSheet(
+                    currentCode = sourceLang,
+                    pinned = emptyList(),
+                    allowAuto = true,
+                    allowedLanguageCodes = null,
+                    onSelect = { code ->
+                        scope.launch { viewModel.updateSettings { it.copy(sourceLang = code) } }
+                        showSourcePicker = false
+                    },
+                    onTogglePin = null,
+                    onDismiss = { showSourcePicker = false },
+                )
+            }
+            if (showTargetPicker) {
+                LanguagePickerSheet(
+                    currentCode = targetLang,
+                    pinned = emptyList(),
+                    allowAuto = false,
+                    allowedLanguageCodes = null,
+                    onSelect = { code ->
+                        scope.launch { viewModel.updateSettings { it.copy(targetLang = code) } }
+                        showTargetPicker = false
+                    },
+                    onTogglePin = null,
+                    onDismiss = { showTargetPicker = false },
+                )
+            }
+            if (showEnginePicker) {
+                AlertDialog(
+                    onDismissRequest = { showEnginePicker = false },
+                    title = { Text(stringResource(R.string.main_engine)) },
+                    text = {
+                        Column {
+                            TranslatorEngine.values().forEach { e ->
+                                TextButton(
+                                    onClick = {
+                                        scope.launch { viewModel.updateSettings { it.copy(translatorEngine = e) } }
+                                        showEnginePicker = false
+                                    },
+                                    modifier = Modifier.fillMaxWidth(),
+                                ) {
+                                    Text(stringResource(translatorEngineLabelRes(e)))
+                                }
+                            }
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(onClick = { showEnginePicker = false }) {
+                            Text(stringResource(R.string.main_preset_switch_cancel))
+                        }
+                    },
+                )
+            }
+
             // 一行实心按钮：开始 / 停止（未授权时就是授权入口）
             if (canDrawOverlay) {
                 if (serviceRunning) {
@@ -2158,6 +2287,10 @@ class MainViewModel @Inject constructor(
     suspend fun currentRegion(): CaptureRegion? = repo.get().captureRegion
     suspend fun clearRegion() {
         repo.update { it.copy(captureRegion = null) }
+    }
+    /** 首页快捷改语言对 / 引擎 / 模式 / 开关用。 */
+    suspend fun updateSettings(transform: (Settings) -> Settings) {
+        repo.update(transform)
     }
     suspend fun recordMainScreenEntryForSharePrompt(): Boolean {
         if (sharePromptEntryRecorded) return false

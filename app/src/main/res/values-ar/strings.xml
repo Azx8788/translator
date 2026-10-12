@@ -2034,4 +2034,7 @@
     <string name="settings_ai_fluent">أكثر طلاقة</string>
     <string name="settings_ai_style">أسلوب الترجمة</string>
     <string name="settings_ai_preserve_names">الحفاظ على الأسماء الذاتية</string>
+    <string name="settings_gesture_group">التحكم بالإيماءات</string>
+    <string name="settings_gesture_shake">هز الجهاز للترجمة</string>
+    <string name="settings_gesture_flip">قلب الجهاز للترجمة</string>
 </resources>

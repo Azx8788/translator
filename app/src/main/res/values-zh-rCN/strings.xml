@@ -2115,4 +2115,7 @@
     <string name="settings_ai_fluent">更流畅</string>
     <string name="settings_ai_style">译文风格</string>
     <string name="settings_ai_preserve_names">保留专有名词</string>
+    <string name="settings_gesture_group">手势控制</string>
+    <string name="settings_gesture_shake">摇晃触发翻译</string>
+    <string name="settings_gesture_flip">翻转触发翻译</string>
 </resources>

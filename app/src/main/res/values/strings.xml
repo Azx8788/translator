@@ -2118,4 +2118,7 @@
     <string name="settings_ai_fluent">More fluent</string>
     <string name="settings_ai_style">Translation style</string>
     <string name="settings_ai_preserve_names">Preserve proper nouns</string>
+    <string name="settings_gesture_group">Gesture control</string>
+    <string name="settings_gesture_shake">Shake to translate</string>
+    <string name="settings_gesture_flip">Flip to translate</string>
 </resources>

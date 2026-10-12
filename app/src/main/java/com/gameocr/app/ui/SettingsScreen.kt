@@ -142,6 +142,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import com.gameocr.app.service.GestureSensorService
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.viewinterop.AndroidView
@@ -794,6 +795,8 @@ fun SettingsScreen(
     var aiFixGrammar by remember { mutableStateOf(false) }
     var aiFluent by remember { mutableStateOf(true) }
     var aiPreserveNames by remember { mutableStateOf(true) }
+    var gestureShakeEnabled by remember { mutableStateOf(false) }
+    var gestureFlipEnabled by remember { mutableStateOf(false) }
     var foregroundAppDetectionMode by remember {
         mutableStateOf(com.gameocr.app.data.ForegroundAppDetectionMode.AUTO)
     }
@@ -1073,6 +1076,8 @@ fun SettingsScreen(
         aiFixGrammar = s.aiFixGrammar
         aiFluent = s.aiFluent
         aiPreserveNames = s.aiPreserveNames
+        gestureShakeEnabled = s.gestureShakeEnabled
+        gestureFlipEnabled = s.gestureFlipEnabled
         foregroundAppDetectionMode = s.foregroundAppDetectionMode
         sendAppNameToTranslator = s.sendAppNameToTranslator
         deeplKey = s.deeplApiKey
@@ -1570,6 +1575,8 @@ fun SettingsScreen(
         aiFixGrammar = aiFixGrammar,
         aiFluent = aiFluent,
         aiPreserveNames = aiPreserveNames,
+        gestureShakeEnabled = gestureShakeEnabled,
+        gestureFlipEnabled = gestureFlipEnabled,
         sendAppNameToTranslator = sendAppNameToTranslator,
         dbnetProbThresh = dbnetProb,
         dbnetBoxScoreThresh = dbnetScore,
@@ -2991,6 +2998,8 @@ fun SettingsScreen(
             aiFixGrammar = s.aiFixGrammar
             aiFluent = s.aiFluent
             aiPreserveNames = s.aiPreserveNames
+            gestureShakeEnabled = s.gestureShakeEnabled
+            gestureFlipEnabled = s.gestureFlipEnabled
             foregroundAppDetectionMode = s.foregroundAppDetectionMode
             sendAppNameToTranslator = s.sendAppNameToTranslator
             cleartextHostsText = s.cleartextAllowedHosts.joinToString("\n")
@@ -3621,6 +3630,26 @@ fun SettingsScreen(
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                     Text(stringResource(R.string.settings_ai_preserve_names))
                     Switch(checked = aiPreserveNames, onCheckedChange = { aiPreserveNames = it })
+                }
+                // 手势控制（P4）
+                Text(
+                    stringResource(R.string.settings_gesture_group),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.settings_gesture_shake))
+                    Switch(checked = gestureShakeEnabled, onCheckedChange = {
+                        gestureShakeEnabled = it
+                        if (it) context.startService(GestureSensorService.startIntent(context))
+                    })
+                }
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.settings_gesture_flip))
+                    Switch(checked = gestureFlipEnabled, onCheckedChange = {
+                        gestureFlipEnabled = it
+                        if (it) context.startService(GestureSensorService.startIntent(context))
+                    })
                 }
                 // All on-device options share one group; cloud engines remain split by API type.
                 Text(

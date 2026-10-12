@@ -200,6 +200,9 @@ data class Settings(
      * 会自动回退到 [ocrEngine]；循环翻译仍走 OCR。
      */
     val a11yTextSourceEnabled: Boolean = false,
+    // 手势控制（P4）：摇晃 / 翻转触发全屏翻译
+    val gestureShakeEnabled: Boolean = false,
+    val gestureFlipEnabled: Boolean = false,
     val translatorEngine: TranslatorEngine = TranslatorEngine.OPENAI,
     // AI 翻译质量开关（仅对 chat 后端生效：OpenAI/Anthropic/本地llama；Sakura/Hy-MT2 特化模型白名单排除）
     val aiFixTypo: Boolean = false,

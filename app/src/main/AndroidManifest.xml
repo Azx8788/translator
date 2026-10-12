@@ -119,6 +119,10 @@
                 android:value="true" />
         </service>
 
+        <service
+            android:name=".service.GestureSensorService"
+            android:exported="false" />
+
         <!-- 系统「文字选中」菜单入口：用户在任意 App 长按文字选词，系统菜单会列出本项。
              无 UI，立即 finish；翻译走 application scope；结果浮卡显示在原 App 上层。 -->
         <activity

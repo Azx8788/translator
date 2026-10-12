@@ -1,12 +1,9 @@
 name: CodeQL
 
+# 降频（专家 10.3）：不随 push/PR 自动触发，改手动 workflow_dispatch。
+# 保留文件作为可选安全门禁（发版前手动跑）；避免频繁 failure 污染 CI 状态。
 on:
-  push:
-    branches: [main, dev]
-  pull_request:
-    branches: [main, dev]
-  schedule:
-    - cron: '34 2 * * 1'
+  workflow_dispatch:
 
 permissions:
   contents: read

@@ -2037,4 +2037,8 @@
     <string name="settings_gesture_group">التحكم بالإيماءات</string>
     <string name="settings_gesture_shake">هز الجهاز للترجمة</string>
     <string name="settings_gesture_flip">قلب الجهاز للترجمة</string>
+    <string name="widget_label">إجراءات سريعة للمترجم</string>
+    <string name="widget_btn_translate">ترجم</string>
+    <string name="widget_btn_stop">إيقاف</string>
+    <string name="widget_btn_open">فتح التطبيق</string>
 </resources>

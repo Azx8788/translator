@@ -123,6 +123,17 @@
             android:name=".service.GestureSensorService"
             android:exported="false" />
 
+        <receiver
+            android:name=".service.widget.QuickActionsWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_quick_actions_info" />
+        </receiver>
+
         <!-- 系统「文字选中」菜单入口：用户在任意 App 长按文字选词，系统菜单会列出本项。
              无 UI，立即 finish；翻译走 application scope；结果浮卡显示在原 App 上层。 -->
         <activity

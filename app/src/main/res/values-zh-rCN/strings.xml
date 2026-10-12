@@ -2118,4 +2118,8 @@
     <string name="settings_gesture_group">手势控制</string>
     <string name="settings_gesture_shake">摇晃触发翻译</string>
     <string name="settings_gesture_flip">翻转触发翻译</string>
+    <string name="widget_label">翻译器快捷操作</string>
+    <string name="widget_btn_translate">翻译</string>
+    <string name="widget_btn_stop">停止</string>
+    <string name="widget_btn_open">打开应用</string>
 </resources>

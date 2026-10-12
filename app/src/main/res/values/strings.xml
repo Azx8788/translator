@@ -2121,4 +2121,8 @@
     <string name="settings_gesture_group">Gesture control</string>
     <string name="settings_gesture_shake">Shake to translate</string>
     <string name="settings_gesture_flip">Flip to translate</string>
+    <string name="widget_label">Translator quick actions</string>
+    <string name="widget_btn_translate">Translate</string>
+    <string name="widget_btn_stop">Stop</string>
+    <string name="widget_btn_open">Open app</string>
 </resources>

@@ -790,6 +790,10 @@ fun SettingsScreen(
         mutableStateOf(com.gameocr.app.data.TranslationOutputDirection.LEFT_TO_RIGHT)
     }
     var translationGlossaryEnabled by remember { mutableStateOf(true) }
+    var aiFixTypo by remember { mutableStateOf(false) }
+    var aiFixGrammar by remember { mutableStateOf(false) }
+    var aiFluent by remember { mutableStateOf(true) }
+    var aiPreserveNames by remember { mutableStateOf(true) }
     var foregroundAppDetectionMode by remember {
         mutableStateOf(com.gameocr.app.data.ForegroundAppDetectionMode.AUTO)
     }
@@ -1065,6 +1069,10 @@ fun SettingsScreen(
         dictionaryPrompt = s.dictionaryPrompt
         translatorEngine = s.translatorEngine
         translationGlossaryEnabled = s.translationGlossaryEnabled
+        aiFixTypo = s.aiFixTypo
+        aiFixGrammar = s.aiFixGrammar
+        aiFluent = s.aiFluent
+        aiPreserveNames = s.aiPreserveNames
         foregroundAppDetectionMode = s.foregroundAppDetectionMode
         sendAppNameToTranslator = s.sendAppNameToTranslator
         deeplKey = s.deeplApiKey
@@ -1558,6 +1566,10 @@ fun SettingsScreen(
         translationOutputLayout = translationOutputLayout,
         translationOutputDirection = translationOutputDirection,
         translationGlossaryEnabled = translationGlossaryEnabled,
+        aiFixTypo = aiFixTypo,
+        aiFixGrammar = aiFixGrammar,
+        aiFluent = aiFluent,
+        aiPreserveNames = aiPreserveNames,
         sendAppNameToTranslator = sendAppNameToTranslator,
         dbnetProbThresh = dbnetProb,
         dbnetBoxScoreThresh = dbnetScore,
@@ -2975,6 +2987,10 @@ fun SettingsScreen(
                 translationOutputDirection = output.direction
             }
             translationGlossaryEnabled = s.translationGlossaryEnabled
+            aiFixTypo = s.aiFixTypo
+            aiFixGrammar = s.aiFixGrammar
+            aiFluent = s.aiFluent
+            aiPreserveNames = s.aiPreserveNames
             foregroundAppDetectionMode = s.foregroundAppDetectionMode
             sendAppNameToTranslator = s.sendAppNameToTranslator
             cleartextHostsText = s.cleartextAllowedHosts.joinToString("\n")
@@ -3584,6 +3600,28 @@ fun SettingsScreen(
             SectionCard(title = stringResource(R.string.settings_section_translator)) {
                 SettingsSearchTarget(searchTargetRegistry, *SEARCH_TARGET_TRANSLATOR_ENGINE) {
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                // AI 翻译质量（P2）
+                Text(
+                    stringResource(R.string.settings_ai_quality_group),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.settings_ai_fix_typo))
+                    Switch(checked = aiFixTypo, onCheckedChange = { aiFixTypo = it })
+                }
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.settings_ai_fix_grammar))
+                    Switch(checked = aiFixGrammar, onCheckedChange = { aiFixGrammar = it })
+                }
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.settings_ai_fluent))
+                    Switch(checked = aiFluent, onCheckedChange = { aiFluent = it })
+                }
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.settings_ai_preserve_names))
+                    Switch(checked = aiPreserveNames, onCheckedChange = { aiPreserveNames = it })
+                }
                 // All on-device options share one group; cloud engines remain split by API type.
                 Text(
                     stringResource(R.string.settings_translator_group_local_llm),

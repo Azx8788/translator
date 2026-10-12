@@ -2028,4 +2028,10 @@
     <string name="main_mode_word">وضع الكلمات</string>
     <string name="main_a11y_mix">خلط عالي الدقة</string>
     <string name="main_manga_mode">وضع المانجا (ياباني فقط)</string>
+    <string name="settings_ai_quality_group">جودة الترجمة بالذكاء الاصطناعي</string>
+    <string name="settings_ai_fix_typo">تصحيح الأخطاء المطبعية</string>
+    <string name="settings_ai_fix_grammar">تصحيح القواعد</string>
+    <string name="settings_ai_fluent">أكثر طلاقة</string>
+    <string name="settings_ai_style">أسلوب الترجمة</string>
+    <string name="settings_ai_preserve_names">الحفاظ على الأسماء الذاتية</string>
 </resources>

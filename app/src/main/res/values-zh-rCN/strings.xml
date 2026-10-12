@@ -2109,4 +2109,10 @@
     <string name="main_mode_word">单词模式</string>
     <string name="main_a11y_mix">高精度混合</string>
     <string name="main_manga_mode">漫画模式（仅日语）</string>
+    <string name="settings_ai_quality_group">AI 翻译质量</string>
+    <string name="settings_ai_fix_typo">纠正错别字</string>
+    <string name="settings_ai_fix_grammar">修正语病</string>
+    <string name="settings_ai_fluent">更流畅</string>
+    <string name="settings_ai_style">译文风格</string>
+    <string name="settings_ai_preserve_names">保留专有名词</string>
 </resources>

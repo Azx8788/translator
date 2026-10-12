@@ -201,6 +201,12 @@ data class Settings(
      */
     val a11yTextSourceEnabled: Boolean = false,
     val translatorEngine: TranslatorEngine = TranslatorEngine.OPENAI,
+    // AI 翻译质量开关（仅对 chat 后端生效：OpenAI/Anthropic/本地llama；Sakura/Hy-MT2 特化模型白名单排除）
+    val aiFixTypo: Boolean = false,
+    val aiFixGrammar: Boolean = false,
+    val aiFluent: Boolean = true,
+    val aiStyle: String = "",
+    val aiPreserveNames: Boolean = true,
     val translationGlossaryEnabled: Boolean = true,
     /** Master gate for source-preservation matching; individual entry states remain untouched. */
     val sourcePreservationEnabled: Boolean = true,

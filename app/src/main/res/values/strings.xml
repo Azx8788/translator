@@ -2112,4 +2112,10 @@
     <string name="main_mode_word">Word mode</string>
     <string name="main_a11y_mix">High-precision mix</string>
     <string name="main_manga_mode">Manga mode (Japanese only)</string>
+    <string name="settings_ai_quality_group">AI Translation Quality</string>
+    <string name="settings_ai_fix_typo">Fix typos</string>
+    <string name="settings_ai_fix_grammar">Fix grammar</string>
+    <string name="settings_ai_fluent">More fluent</string>
+    <string name="settings_ai_style">Translation style</string>
+    <string name="settings_ai_preserve_names">Preserve proper nouns</string>
 </resources>

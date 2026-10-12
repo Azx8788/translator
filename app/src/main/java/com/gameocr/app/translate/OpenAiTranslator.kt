@@ -921,7 +921,7 @@ class OpenAiTranslator @Inject constructor(
     ): ResolvedOpenAiRequest {
         val targetDisplay = Languages.nameOf(appContext, settings.targetLang)
         val sourceDisplay = Languages.nameOf(appContext, settings.sourceLang)
-        return OpenAiRequestPolicy.resolve(
+        val resolved = OpenAiRequestPolicy.resolve(
             text = text,
             systemPromptTemplate = settings.promptTemplate,
             sourceDisplay = sourceDisplay,
@@ -934,11 +934,13 @@ class OpenAiTranslator @Inject constructor(
                 .takeIf { it.currentPage.isEmpty() }
                 ?.previousFrame
                 .orEmpty(),
-        ).copy(
+        )
+        return resolved.copy(
             visualContextFingerprint = settings.runtimeTranslationVisualContext?.let { visual ->
                 "visual:v${visual.promptVersion}:${visual.sha256}:${visual.combineIntoSingleOutput}:" +
                     settings.openAiRequestOptions.imageDetailWireValue().orEmpty()
             }.orEmpty(),
+            systemMessage = resolved.systemMessage + AiQualityPromptPolicy.directive(settings),
         )
     }
 

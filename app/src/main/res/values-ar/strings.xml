@@ -2022,4 +2022,10 @@
     <string name="word_select_hint_drawing">اسحب مستطيلاً حول النص لترجمته</string>
     <string name="main_swap_languages">تبديل اللغات</string>
     <string name="main_engine">المحرك</string>
+    <string name="main_mode">الوضع</string>
+    <string name="main_mode_simple">بسيط</string>
+    <string name="main_mode_normal">عادي</string>
+    <string name="main_mode_word">وضع الكلمات</string>
+    <string name="main_a11y_mix">خلط عالي الدقة</string>
+    <string name="main_manga_mode">وضع المانجا (ياباني فقط)</string>
 </resources>

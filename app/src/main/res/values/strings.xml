@@ -2106,4 +2106,10 @@
     <string name="settings_search_item_floating_alpha">Floating button opacity</string>
     <string name="main_swap_languages">Swap languages</string>
     <string name="main_engine">Engine</string>
+    <string name="main_mode">Mode</string>
+    <string name="main_mode_simple">Simple</string>
+    <string name="main_mode_normal">Normal</string>
+    <string name="main_mode_word">Word mode</string>
+    <string name="main_a11y_mix">High-precision mix</string>
+    <string name="main_manga_mode">Manga mode (Japanese only)</string>
 </resources>

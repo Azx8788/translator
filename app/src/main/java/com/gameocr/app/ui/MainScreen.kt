@@ -50,6 +50,9 @@ import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material3.IconButton
 import com.gameocr.app.data.Languages
+import com.gameocr.app.data.FloatingSkill
+import com.gameocr.app.data.OcrEngineKind
+import com.gameocr.app.data.RenderMode
 import com.gameocr.app.data.TranslatorEngine
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -65,6 +68,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
+import androidx.compose.material3.Switch
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -700,6 +704,95 @@ fun MainScreen(
                     confirmButton = {
                         TextButton(onClick = { showEnginePicker = false }) {
                             Text(stringResource(R.string.main_preset_switch_cancel))
+                        }
+                    },
+                )
+            }
+
+            // ===== 三模式（专家 B1 拆分：简单/普通两档 + 单词独立）=====
+            val renderMode = appSettings?.renderMode ?: RenderMode.BLOCKS
+            val skill = appSettings?.floatingButtonSkill ?: FloatingSkill.FULL_SCREEN
+            val wordMode = skill == FloatingSkill.WORD_SELECT
+
+            Text(
+                stringResource(R.string.main_mode),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            SingleChoiceSegmentedButtonRow(modifier = Modifier.fillMaxWidth()) {
+                SegmentedButton(
+                    selected = !wordMode && renderMode == RenderMode.BLOCKS,
+                    onClick = {
+                        scope.launch {
+                            viewModel.updateSettings {
+                                it.copy(renderMode = RenderMode.BLOCKS, floatingButtonSkill = FloatingSkill.FULL_SCREEN)
+                            }
+                        }
+                    },
+                    shape = SegmentedButtonDefaults.itemShape(index = 0, count = 2),
+                    label = { Text(stringResource(R.string.main_mode_simple)) },
+                )
+                SegmentedButton(
+                    selected = !wordMode && renderMode == RenderMode.FLOATING_WINDOW,
+                    onClick = {
+                        scope.launch {
+                            viewModel.updateSettings {
+                                it.copy(renderMode = RenderMode.FLOATING_WINDOW, floatingButtonSkill = FloatingSkill.FULL_SCREEN)
+                            }
+                        }
+                    },
+                    shape = SegmentedButtonDefaults.itemShape(index = 1, count = 2),
+                    label = { Text(stringResource(R.string.main_mode_normal)) },
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(stringResource(R.string.main_mode_word), style = MaterialTheme.typography.bodyMedium)
+                Switch(
+                    checked = wordMode,
+                    onCheckedChange = { v ->
+                        scope.launch {
+                            viewModel.updateSettings {
+                                it.copy(floatingButtonSkill = if (v) FloatingSkill.WORD_SELECT else FloatingSkill.FULL_SCREEN)
+                            }
+                        }
+                    },
+                )
+            }
+
+            // ===== 两开关（高精度混合 + 漫画模式）=====
+            val a11yEnabled = appSettings?.a11yTextSourceEnabled ?: false
+            val mangaMode = appSettings?.ocrEngine == OcrEngineKind.MANGA_OCR_JA
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(stringResource(R.string.main_a11y_mix), style = MaterialTheme.typography.bodyMedium)
+                Switch(
+                    checked = a11yEnabled,
+                    onCheckedChange = { v ->
+                        scope.launch { viewModel.updateSettings { it.copy(a11yTextSourceEnabled = v) } }
+                    },
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(stringResource(R.string.main_manga_mode), style = MaterialTheme.typography.bodyMedium)
+                Switch(
+                    checked = mangaMode,
+                    onCheckedChange = { v ->
+                        scope.launch {
+                            viewModel.updateSettings {
+                                it.copy(ocrEngine = if (v) OcrEngineKind.MANGA_OCR_JA else OcrEngineKind.ML_KIT_AUTO)
+                            }
                         }
                     },
                 )
@@ -2289,7 +2382,7 @@ class MainViewModel @Inject constructor(
         repo.update { it.copy(captureRegion = null) }
     }
     /** 首页快捷改语言对 / 引擎 / 模式 / 开关用。 */
-    suspend fun updateSettings(transform: (Settings) -> Settings) {
+    suspend fun updateSettings(transform: (AppSettings) -> AppSettings) {
         repo.update(transform)
     }
     suspend fun recordMainScreenEntryForSharePrompt(): Boolean {

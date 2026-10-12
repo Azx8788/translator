@@ -2103,4 +2103,10 @@
     <string name="settings_search_item_floating_alpha">悬浮按钮透明度</string>
     <string name="main_swap_languages">交换语言</string>
     <string name="main_engine">引擎</string>
+    <string name="main_mode">模式</string>
+    <string name="main_mode_simple">简单</string>
+    <string name="main_mode_normal">普通</string>
+    <string name="main_mode_word">单词模式</string>
+    <string name="main_a11y_mix">高精度混合</string>
+    <string name="main_manga_mode">漫画模式（仅日语）</string>
 </resources>
